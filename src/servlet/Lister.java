@@ -30,7 +30,6 @@ public class Lister extends HttpServlet {
      */
     public Lister() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -44,27 +43,20 @@ public class Lister extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		System.out.println("doPost Lister");
 
 		Base base = new Base();
 		base.ouvrir();
 		Connection connection = base.getConnection();
-		System.out.println(connection);
-		
 		FilmBdd filmBdd = new FilmBdd();
-		
 		ArrayList <Film> films = filmBdd.listerFilms(connection);
-		
 		base.fermer();
+		
 		response.setContentType("application/json");
-		JsonGenerator generator = new JsonFactory().
-				createGenerator(response.getOutputStream());
+		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
 		generator.setCodec(new ObjectMapper());
 		generator.writeObject(films); 
 		generator.close();
-
-		
 	}
 
 }

@@ -4,46 +4,38 @@ import java.sql.Date;
 
 public class Film {
 	
-	Integer idFilm;
-	String name;
-	Date dateRelease;
+	Integer id;
+	String title;
 	String description;
+	Date releaseDate;
 	
 	public Film() {
-		this.idFilm = null;
-		this.name = null;
-		this.dateRelease = null;
+		this.id = null;
+		this.title = null;
 		this.description = null;
+		this.releaseDate = null;
 	}
 
-	public Film(String name, Date dateRelease, String description) {
-		this.name = name;
-		this.dateRelease = dateRelease;
+	public Film(String title, String description, Date releaseDate) {
+		this.title = title;
 		this.description = description;
+		this.releaseDate = releaseDate;
 	}
 
-	public Integer getIdFilm() {
-		return idFilm;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdFilm(Integer idFilm) {
-		this.idFilm = idFilm;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Date getDateRelease() {
-		return dateRelease;
-	}
-
-	public void setDateRelease(Date dateRelease) {
-		this.dateRelease = dateRelease;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getDescription() {
@@ -53,4 +45,14 @@ public class Film {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+
+	
 }

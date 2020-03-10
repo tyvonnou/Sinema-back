@@ -19,9 +19,9 @@ public class FilmBdd {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Film film = new Film();
-				film.setIdFilm(rs.getInt("FilmID"));
-				film.setName(rs.getString("FilmName"));
-				film.setDateRelease(rs.getDate("FilmDateSort"));
+				film.setId(rs.getInt("FilmID"));
+				film.setTitle(rs.getString("FilmName"));
+				film.setReleaseDate(rs.getDate("FilmDateSort"));
 				film.setDescription(rs.getString("FilmDescription"));
 				res.add(film);
 			}
@@ -44,9 +44,9 @@ public class FilmBdd {
 		
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setDate(1, film.getDateRelease());
+			ps.setDate(1, film.getReleaseDate());
 			ps.setString(2, film.getDescription());
-			ps.setString(3, film.getName());			
+			ps.setString(3, film.getTitle());			
 			res = (ps.executeUpdate() == 1);
 			try {ps.close();}catch (Exception e) {}
 			
