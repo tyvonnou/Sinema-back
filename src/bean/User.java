@@ -20,6 +20,12 @@ public class User {
 		this.isAdmin = isAdmin;
 	}	
 	
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+		this.isAdmin = false;
+	}	
+	
 	public Integer getId() {
 		return id;
 	}
