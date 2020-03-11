@@ -19,7 +19,7 @@ import base.FilmBdd;
  * Notre serlvet permettant de récupérer les fichiers côté serveur.
  * Elle répondra à l'URL /upload dans l'application Web considérée.
  */
-@WebServlet( urlPatterns = "/upload" )
+@WebServlet( urlPatterns = "/Upload" )
 @MultipartConfig( fileSizeThreshold = 1024 * 1024, 
                   maxFileSize = 1024 * 1024 * 5,
                   maxRequestSize = 1024 * 1024 * 5 * 5 )
@@ -30,7 +30,7 @@ public class Upload extends HttpServlet {
     /*
      * Chemin dans lequel les images seront sauvegardées.
      */
-    public static final String IMAGES_FOLDER = "/Images";
+    public static final String IMAGES_FOLDER = "/WebContent/WEB-INF/";
         
     public String uploadPath;
     
@@ -51,16 +51,18 @@ public class Upload extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse resp)
             throws ServletException, IOException {
     	 	Base base = new Base();
+    	 	this.init();
  			base.ouvrir();
-	        for ( Part part : request.getParts() ) {
+	        for ( Part part : request.getParts()) {
 	        	// Stockage serveur 
 	            String fileName = getFileName( part );
+	            System.out.println(fileName);
 	            String fullPath = uploadPath + File.separator + fileName;
 	            part.write( fullPath );
 	            // Stockage MySQL
-	            FilmBdd filmbdd = new FilmBdd();
-	    		Connection connection = base.getConnection();
-	            filmbdd.ajouterImage(Integer.parseInt(request.getParameter("FilmID")), fullPath, connection);      
+//	            FilmBdd filmbdd = new FilmBdd();
+//	    		Connection connection = base.getConnection();
+//	            filmbdd.ajouterImage(Integer.parseInt(request.getParameter("FilmID")), fullPath, connection);      
 	        }
 	        base.fermer();
     }

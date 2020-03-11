@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import bean.Film;
 
@@ -73,21 +74,28 @@ public class FilmBdd {
 	}
 	
 	// Ajoute un film à la base 
-	public boolean enregistrerFilm(Film film, Connection connection) {
+	public int enregistrerFilm(Film film, Connection connection) {
 		
 		// Préparation du résultat
-		boolean res = false;
+		int result = -1;
 		// Préparation de la requête
 		String sql = "INSERT INTO Film " + "(FilmDateSort, FilmDescription, FilmName) values (?, ?, ?)";
-	
 		try {
+			
 			// Remplissage de la requête 
-			PreparedStatement ps = connection.prepareStatement(sql);
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setDate(1, film.getReleaseDate());
 			ps.setString(2, film.getDescription());
 			ps.setString(3, film.getTitle());
 			// Modification du résultat
-			res = (ps.executeUpdate() == 1);
+			
+			result = ps.executeUpdate();
+			ResultSet rs = ps.getGeneratedKeys();
+			if (rs.next()) {
+				result = Integer.parseInt(rs.getString(1));
+				System.out.println(result);
+			}
+			
 			try {ps.close();}catch (Exception e) {}
 			
 		} catch (Exception e) {
@@ -95,7 +103,7 @@ public class FilmBdd {
 			System.out.println("Error enregistrerFilm " + e.getMessage());
 			e.printStackTrace();
 		}
-		return res;
+		return result;
 	}
 	
 	// Supprime un film de la base

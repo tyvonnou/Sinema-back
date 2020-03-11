@@ -52,34 +52,27 @@ public class Enregistrer extends HttpServlet {
 		Date dte = Date.valueOf(request.getParameter("releaseDate").substring(0,10));
 		Film f = new Film(title,des,dte);
 		System.out.println("Film reçu : Titre = "+f.getTitle()+" Description = "+f.getDescription()+ " Date de sortie = "+f.getReleaseDate());	
-		// Gestion des erreurs
-		Hashtable<String, String > err = new Hashtable<String, String>();
-		err.put("titre","Veuillez saisir un titre");
-		err.put("description","Veuillez saisir une description");
-		err.put("releaseDate","Veuillez saisir une releaseDate");
-		response.setContentType("application/json");
-		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
-		generator.setCodec(new ObjectMapper());
-		generator.writeObject(err); 
-		generator.close();
+		
 		// Connection a la base 
 		Base base = new Base();
 		base.ouvrir();
 		Connection connection = base.getConnection();
 		FilmBdd filmBdd = new FilmBdd();
 		// Si le film existe 
+		int id = -1;
+		
 		if (filmBdd.filmExist(f, connection)) {
-			System.out.println("Film déjà présent");
 		} else {
-			System.out.println("ajout...");
-			filmBdd.enregistrerFilm(f, connection);
-			if (filmBdd.filmExist(f, connection)) {
-				System.out.println("OK");
-			} else {
-				System.out.println("NOPE");
-			}
-
+			id = filmBdd.enregistrerFilm(f, connection);
 		}
+		
+		Hashtable<String, Integer > res = new Hashtable<String, Integer>();
+		res.put("FilmID",id);
+		response.setContentType("application/json");
+		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
+		generator.setCodec(new ObjectMapper());
+		generator.writeObject(res); 
+		generator.close();
 		base.fermer();
 		
 	}
