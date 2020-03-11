@@ -65,6 +65,8 @@ public class Enregistrer extends HttpServlet {
 		FilmBdd filmBdd = new FilmBdd();
 		filmBdd.enregistrerFilm(f, connection);
 		base.fermer();
+		// On renvoie l'id du film
+		request.setAttribute("FilmID", f.getId());
 		
 	}
 

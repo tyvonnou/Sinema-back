@@ -47,18 +47,17 @@ public class Supprimer extends HttpServlet {
 		// Reception du film
 		Film f  = new ObjectMapper().readValue(request.getReader(), Film.class);
 		System.out.println("Film reçu : Titre = "+f.getTitle()+" Description = "+f.getDescription()+ " Date de sortie = "+f.getReleaseDate());	
-
+		// Gestion des erreurs
 		Hashtable<String, String > err = new Hashtable<String, String>();
 		err.put("Titre","Veuillez saisir un Titre");
 		err.put("Description","Veuillez saisir une Description");
 		err.put("Date de sortie ","Veuillez saisir une Date de sortie");
-		
 		response.setContentType("application/json");
 		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
 		generator.setCodec(new ObjectMapper());
 		generator.writeObject(err); 
 		generator.close();
-		
+		// Suppression
 		Base base = new Base();
 		base.ouvrir();
 		Connection connection = base.getConnection();

@@ -1,5 +1,6 @@
 package base;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -70,6 +71,7 @@ public class FilmBdd {
 		return res;
 	}
 	
+	// Supprime un film de la base
 	public boolean supprimerFilm(Film film, Connection connection) {
 		// Préparation du résultat
 		boolean res = false;
@@ -91,6 +93,25 @@ public class FilmBdd {
 		return res;
 	}
 	
+	// Supprime une image du serveur
+	public boolean supprimerImageFromServ(String location) {
+		// Préparation du résultat
+		boolean res = false;
+		// Fichier à supprimer 
+		File f= new File(location);           
+		if(f.delete())                        
+		{  
+			System.out.println(f.getName() + " deleted");     
+			res = true;
+		}  
+		else  
+		{  
+			System.out.println("failed");  
+		}  
+		return res;
+	}
+	
+	// Supprime toutes les images d'un films dans la base
 	public boolean supprimerImages(Film film, Connection connection) {
 		// Préparation du résultat
 		boolean res = false;
@@ -113,7 +134,7 @@ public class FilmBdd {
 	}
 	
 	// Ajout d'une image
-	public boolean ajouterImage(Film film,  Picture img, Connection connection) {
+	public boolean ajouterImage(Integer idfilm,  String location, Connection connection) {
 		// Préparation du résultat
 		boolean res = false;
 		// Préparation de la requête
@@ -121,8 +142,8 @@ public class FilmBdd {
 		try {
 			// Remplissage de la requête 
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setString(1, img.getLocation());
-			ps.setInt(2, film.getId());
+			ps.setString(1, location);
+			ps.setInt(2, idfilm);
 			// Modification du résultat
 			res = (ps.executeUpdate() == 1);
 			try {ps.close();}catch (Exception e) {}
