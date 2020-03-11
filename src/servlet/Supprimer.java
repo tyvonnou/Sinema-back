@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.Hashtable;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,25 +46,40 @@ public class Supprimer extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("doPost Supprimer");
 		// Reception du film
-		Film f  = new ObjectMapper().readValue(request.getReader(), Film.class);
-		System.out.println("Film reçu : Titre = "+f.getTitle()+" Description = "+f.getDescription()+ " Date de sortie = "+f.getReleaseDate());	
-		// Gestion des erreurs
-		Hashtable<String, String > err = new Hashtable<String, String>();
-		err.put("Titre","Veuillez saisir un Titre");
-		err.put("Description","Veuillez saisir une Description");
-		err.put("Date de sortie ","Veuillez saisir une Date de sortie");
-		response.setContentType("application/json");
-		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
-		generator.setCodec(new ObjectMapper());
-		generator.writeObject(err); 
-		generator.close();
-		// Suppression
-		Base base = new Base();
-		base.ouvrir();
-		Connection connection = base.getConnection();
-		FilmBdd filmBdd = new FilmBdd();
-		filmBdd.supprimerFilm(f, connection);
-		base.fermer();
+				String title = request.getParameter("title");
+				String des = request.getParameter("description");
+				Date dte = Date.valueOf(request.getParameter("releaseDate").substring(0,10));
+				Film f = new Film(title,des,dte);
+				System.out.println("Film reçu : Titre = "+f.getTitle()+" Description = "+f.getDescription()+ " Date de sortie = "+f.getReleaseDate());	
+				// Gestion des erreurs
+				Hashtable<String, String > err = new Hashtable<String, String>();
+				err.put("titre","Veuillez saisir un titre");
+				err.put("description","Veuillez saisir une description");
+				err.put("releaseDate","Veuillez saisir une releaseDate");
+				response.setContentType("application/json");
+				JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
+				generator.setCodec(new ObjectMapper());
+				generator.writeObject(err); 
+				generator.close();
+				// Connection a la base 
+				Base base = new Base();
+				base.ouvrir();
+				Connection connection = base.getConnection();
+				FilmBdd filmBdd = new FilmBdd();
+				// Si le film existe pas
+				if (!filmBdd.filmExist(f, connection)) {
+					System.out.println("le film n'existe pas");
+				} else {
+					System.out.println("suppression...");
+					filmBdd.supprimerFilm(f, connection);
+					if (filmBdd.filmExist(f, connection)) {
+						System.out.println("Nope");
+					} else {
+						System.out.println("OK");
+					}
+
+				}
+				base.fermer();
 	}
 
 }

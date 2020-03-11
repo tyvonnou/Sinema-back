@@ -9,6 +9,35 @@ import bean.Film;
 
 public class FilmBdd {
 	
+	// Vérifie si un film existe dans la base 
+	public boolean filmExist(Film f, Connection connection) {
+		boolean res = false;
+		// Préparation de la requête et du résultat
+		String sql = "SELECT FilmID FROM `Film` WHERE FilmDateSort = ? AND FilmDescription = ? AND FilmName = ?;";
+		try {
+			// Lancement de la requête 
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setDate(1, f.getReleaseDate());
+			ps.setString(2, f.getDescription());
+			ps.setString(3, f.getTitle());
+			ResultSet rs = ps.executeQuery();
+			// Tant qu'il y a des films 
+			if (rs.next())  {
+				res = true;
+			}
+			// Fermeture 
+			try {rs.close();}catch (Exception e) {}
+			try {ps.close();}catch (Exception e) {}
+		
+		} catch (Exception e) {
+			// Si echec affichage de l'erreur
+			System.out.println("SQL Error " + e.getMessage());
+			e.printStackTrace();
+		}
+		// Je retourne le résultat
+		return res;
+	}
+	
 	// Liste les films présent sur la base
 	public ArrayList <Film> listerFilms(Connection connection) {
 		// Préparation de la requête et du résultat
@@ -74,11 +103,13 @@ public class FilmBdd {
 		// Préparation du résultat
 		boolean res = false;
 		// Préparation de la requête
-		String sql = "DELETE FROM Film WHERE FilmID = ?";
+		String sql = "DELETE FROM Film WHERE FilmDateSort = ? AND FilmDescription = ? AND FilmName = ?;";
 		try {
 			// Remplissage de la requête 
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(1, film.getId());
+			ps.setDate(1, film.getReleaseDate());
+			ps.setString(2, film.getDescription());
+			ps.setString(3, film.getTitle());
 			// Modification du résultat
 			res = (ps.executeUpdate() == 1);
 			try {ps.close();}catch (Exception e) {}

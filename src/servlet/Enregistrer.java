@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.Hashtable;
 
 import javax.servlet.ServletException;
@@ -46,13 +47,16 @@ public class Enregistrer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("doPost Enregistrer");
 		// Reception du film
-		Film f  = new ObjectMapper().readValue(request.getReader(), Film.class);
+		String title = request.getParameter("title");
+		String des = request.getParameter("description");
+		Date dte = Date.valueOf(request.getParameter("releaseDate").substring(0,10));
+		Film f = new Film(title,des,dte);
 		System.out.println("Film reçu : Titre = "+f.getTitle()+" Description = "+f.getDescription()+ " Date de sortie = "+f.getReleaseDate());	
 		// Gestion des erreurs
 		Hashtable<String, String > err = new Hashtable<String, String>();
 		err.put("titre","Veuillez saisir un titre");
-		err.put("auteur","Veuillez saisir un auteur");
-		err.put("annee","Veuillez saisir une année");
+		err.put("description","Veuillez saisir une description");
+		err.put("releaseDate","Veuillez saisir une releaseDate");
 		response.setContentType("application/json");
 		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
 		generator.setCodec(new ObjectMapper());
@@ -63,10 +67,20 @@ public class Enregistrer extends HttpServlet {
 		base.ouvrir();
 		Connection connection = base.getConnection();
 		FilmBdd filmBdd = new FilmBdd();
-		filmBdd.enregistrerFilm(f, connection);
+		// Si le film existe 
+		if (filmBdd.filmExist(f, connection)) {
+			System.out.println("Film déjà présent");
+		} else {
+			System.out.println("ajout...");
+			filmBdd.enregistrerFilm(f, connection);
+			if (filmBdd.filmExist(f, connection)) {
+				System.out.println("OK");
+			} else {
+				System.out.println("NOPE");
+			}
+
+		}
 		base.fermer();
-		// On renvoie l'id du film
-		request.setAttribute("FilmID", f.getId());
 		
 	}
 

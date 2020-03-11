@@ -60,7 +60,7 @@ public class Upload extends HttpServlet {
 	            // Stockage MySQL
 	            FilmBdd filmbdd = new FilmBdd();
 	    		Connection connection = base.getConnection();
-	            filmbdd.ajouterImage((int) request.getAttribute("FilmID"), fullPath, connection);      
+	            filmbdd.ajouterImage(Integer.parseInt(request.getParameter("FilmID")), fullPath, connection);      
 	        }
 	        base.fermer();
     }
