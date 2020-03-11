@@ -2,6 +2,8 @@ package servlet;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
+import base.Base;
+import base.FilmBdd;
 
 /*
  * Notre serlvet permettant de récupérer les fichiers côté serveur.
@@ -45,11 +50,19 @@ public class Upload extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse resp)
             throws ServletException, IOException {
-        for ( Part part : request.getParts() ) {
-            String fileName = getFileName( part );
-            String fullPath = uploadPath + File.separator + fileName;
-            part.write( fullPath );
-        }
+    	 	Base base = new Base();
+ 			base.ouvrir();
+	        for ( Part part : request.getParts() ) {
+	        	// Stockage serveur 
+	            String fileName = getFileName( part );
+	            String fullPath = uploadPath + File.separator + fileName;
+	            part.write( fullPath );
+	            // Stockage MySQL
+	            FilmBdd filmbdd = new FilmBdd();
+	    		Connection connection = base.getConnection();
+	            filmbdd.ajouterImage((int) request.getAttribute("FilmID"), fullPath, connection);      
+	        }
+	        base.fermer();
     }
 
     /*
