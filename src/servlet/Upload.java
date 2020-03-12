@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import base.Base;
-import base.FilmBdd;
+import base.MovieDtb;
 
 /*
  * Notre serlvet permettant de récupérer les fichiers côté serveur. Elle répondra à l'URL /upload

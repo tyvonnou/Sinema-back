@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import base.Base;
-import base.FilmBdd;
+import base.MovieDtb;
 import bean.Film;
 
 /**
@@ -63,15 +63,15 @@ public class Supprimer extends HttpServlet {
 				generator.close();
 				// Connection a la base 
 				Base base = new Base();
-				base.ouvrir();
+				base.open();
 				Connection connection = base.getConnection();
-				FilmBdd filmBdd = new FilmBdd();
+				MovieDtb filmBdd = new MovieDtb();
 				// Si le film existe pas
 				if (!filmBdd.filmExist(f, connection)) {
 					System.out.println("le film n'existe pas");
 				} else {
 					System.out.println("suppression...");
-					filmBdd.supprimerFilm(f, connection);
+					filmBdd.deleteMovie(f, connection);
 					if (filmBdd.filmExist(f, connection)) {
 						System.out.println("Nope");
 					} else {
@@ -79,7 +79,7 @@ public class Supprimer extends HttpServlet {
 					}
 
 				}
-				base.fermer();
+				base.close();
 	}
 
 }

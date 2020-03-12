@@ -16,7 +16,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import base.Base;
-import base.FilmBdd;
+import base.MovieDtb;
 import bean.Film;
 
 /**
@@ -55,15 +55,15 @@ public class Enregistrer extends HttpServlet {
 		
 		// Connection a la base 
 		Base base = new Base();
-		base.ouvrir();
+		base.open();
 		Connection connection = base.getConnection();
-		FilmBdd filmBdd = new FilmBdd();
+		MovieDtb filmBdd = new MovieDtb();
 		// Si le film existe 
 		int id = -1;
 		
 		if (filmBdd.filmExist(f, connection)) {
 		} else {
-			id = filmBdd.enregistrerFilm(f, connection);
+			id = filmBdd.addMovie(f, connection);
 		}
 		
 		Hashtable<String, Integer > res = new Hashtable<String, Integer>();
@@ -73,7 +73,7 @@ public class Enregistrer extends HttpServlet {
 		generator.setCodec(new ObjectMapper());
 		generator.writeObject(res); 
 		generator.close();
-		base.fermer();
+		base.close();
 		
 	}
 

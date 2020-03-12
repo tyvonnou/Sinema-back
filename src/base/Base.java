@@ -26,7 +26,7 @@ public class Base {
 		return connection;
 	}
 	
-	public boolean ouvrir() {
+	public boolean open() {
 		
 		boolean res = false;
 		
@@ -53,7 +53,7 @@ public class Base {
 		return res;
 	}
 	
-	public boolean fermer() {
+	public boolean close() {
 		try {connection.close();}catch (Exception e) {}
 		return true;
 	}

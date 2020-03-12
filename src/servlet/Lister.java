@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import bean.Film;
 import base.Base;
-import base.FilmBdd;
+import base.MovieDtb;
 
 /**
  * Servlet implementation class Lister
@@ -46,11 +46,11 @@ public class Lister extends HttpServlet {
 		System.out.println("doPost Lister");
 
 		Base base = new Base();
-		base.ouvrir();
+		base.open();
 		Connection connection = base.getConnection();
-		FilmBdd filmBdd = new FilmBdd();
+		MovieDtb filmBdd = new MovieDtb();
 		ArrayList <Film> films = filmBdd.listerFilms(connection);
-		base.fermer();
+		base.close();
 		
 		response.setContentType("application/json");
 		JsonGenerator generator = new JsonFactory().createGenerator(response.getOutputStream());
