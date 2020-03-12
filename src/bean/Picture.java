@@ -2,33 +2,47 @@ package bean;
 
 public class Picture {
 
-		Integer idFilm;
-		String location;
-		
-		public Picture() {
-			this.idFilm = null;
-			this.location = null;
-		}
-		
-		public Picture(Integer idFilm, String location) {
-			this.idFilm = idFilm;
-			this.location = location;
-		}
+  Integer id;
+  String location;
+  String contentType;
+  Integer idFilm;
 
-		public Integer getIdFilm() {
-			return idFilm;
-		}
+  public Picture(String location, String contentType, Integer idFilm) {
+    this.location = location;
+    this.contentType = contentType;
+    this.idFilm = idFilm;
+  }
 
-		public void setIdFilm(Integer idFilm) {
-			this.idFilm = idFilm;
-		}
+  public Integer getId() {
+    return id;
+  }
 
-		public String getLocation() {
-			return location;
-		}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-		public void setLocation(String location) {
-			this.location = location;
-		}
-		
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
+
+  public Integer getIdFilm() {
+    return idFilm;
+  }
+
+  public void setIdFilm(Integer idFilm) {
+    this.idFilm = idFilm;
+  }
+  
 }

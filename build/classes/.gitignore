@@ -1,6 +1,5 @@
-/servlet/
 /base/
-/manager/
-/images/
-/file/
-/picture/
+/bean/
+/pictureServer/
+/servlet/
+/helper/
