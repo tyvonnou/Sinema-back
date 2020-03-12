@@ -34,8 +34,7 @@ public class Base {
 		String user = null;
 		String password = null;
 		
-		ResourceBundle rb = 
-		ResourceBundle.getBundle("config/config");
+		ResourceBundle rb = ResourceBundle.getBundle("config/config");
 		url = rb.getString("url");
 		user = rb.getString("user");
 		password = rb.getString("password");

@@ -7,9 +7,8 @@ import bean.User;
 
 public class UserBdd {
 	
-	public User connection(User user, Connection connection) {
+	public Boolean connection(String username, String password, Connection connection) {
 		
-		User usr = new User();
 		// Préparation de la requête
 		String sql = "SELECT * FROM UserInfo WHERE UserName = ? AND UserPassword = ? ;";
 		
